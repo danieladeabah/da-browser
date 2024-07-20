@@ -10,7 +10,7 @@ To run this project locally:
    ```
 2. Navigate to the project directory:
    ```bash
-   cd DailyTasks
+   cd da-browser-ex
    ```
 3. Install dependencies:
    ```bash
