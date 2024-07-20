@@ -1,7 +1,8 @@
 <template>
   <AppWrapper>
     <NavigationHeaderLayout />
-    <BrowserActivityLayout />
+    <DashboardArticleView />
+    <DashboardArticleComments />
     <NavigationFooterLayout />
   </AppWrapper>
 </template>

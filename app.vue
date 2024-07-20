@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 useHead({
-  title: "DA Browser Ex",
+  title: "Da Browser Ex",
   link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   meta: [
     { name: "description", content: "DA Browser Ex | Daniel Adeabah" },

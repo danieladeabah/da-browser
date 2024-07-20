@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import { texts } from "~~/texts/texts.json";
+import texts from "@/texts/texts.json";
 </script>

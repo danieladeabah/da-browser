@@ -1,4 +1,4 @@
 <template>
-  <ProjectActivityStatsView />
-  <ProjectActivityActivitiesLists />
+  <BrowserActivityActivitiesLists />
+  <BrowserActivityArticleLists />
 </template>
