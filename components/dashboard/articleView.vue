@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <h1 class="text-3xl font-bold px-5">{{ article.title }}</h1>
-    <p class="text-gray-400 p-5">
-      <span>{{ article.source }}</span> ~ <span>{{ article.readTime }}</span>
-    </p>
-    <img
-      :src="article.imageSrc"
-      alt="article img"
-      class="w-full h-96 object-cover"
-    />
-  </div>
+  <h1 class="text-3xl font-bold px-5">{{ article.title }}</h1>
+  <p class="text-gray-400 p-5">
+    <span>{{ article.source }}</span> ~ <span>{{ article.readTime }}</span>
+  </p>
+  <img
+    :src="article.imageSrc"
+    alt="article img"
+    class="w-full h-96 object-cover"
+  />
   <div class="p-5">
     <p
       v-for="(paragraph, index) in article.content"

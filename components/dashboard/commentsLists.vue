@@ -11,7 +11,7 @@
     <div class="flex items-center gap-5">
       <p class="flex items-center gap-1">
         <img
-          src="/assets/icons/thumb-up.svg"
+          src="/assets/icons/thumb-up-outline.svg"
           alt="like icon"
           class="w-3 h-3 cursor-pointer"
           title="Like"
