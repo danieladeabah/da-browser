@@ -6,7 +6,8 @@
         {{ texts.comments.text }} ({{ comments.length }})
       </p>
       <p
-        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer"
+        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer bg-[#F5F5F5] rounded px-2"
+        title="Add Comment"
         @click="addCommentModal"
       >
         <img
@@ -29,14 +30,10 @@
     v-model="addAComment"
     @closeDialog="addAComment = false"
   >
-    <label class="font-bold" for="author">{{
-      texts.bookFormModel.name
-    }}</label>
+    <label class="font-bold" for="author">{{ texts.bookFormModel.name }}</label>
     <UInput placeholder="Name" v-model="author" maxLength="100" />
 
-    <label class="font-bold" for="message">{{
-      texts.comments.message
-    }}</label>
+    <label class="font-bold" for="message">{{ texts.comments.message }}</label>
     <UTextarea
       placeholder="Message"
       :rows="10"
@@ -90,7 +87,8 @@ const comments = ref([
     id: 1,
     author: "Fiz Danielz",
     time: "1 hr ago",
-    message: "Suspendisse eget sapien in sem cursus facilisis. Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna",
+    message:
+      "Suspendisse eget sapien in sem cursus facilisis. Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna",
     likes: 12,
     user_replies: 1,
     replies: [
@@ -98,7 +96,8 @@ const comments = ref([
         id: 2,
         author: "Jane Dee",
         time: "2 mins ago",
-        message: "Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna. Mauris euismod ligula eget purus cursus sollicitudin.",
+        message:
+          "Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna. Mauris euismod ligula eget purus cursus sollicitudin.",
         likes: 2,
         user_replies: 0,
         replies: [],

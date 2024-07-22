@@ -25,53 +25,117 @@
     @close-modal="createBookmarkModal"
     v-if="createABookmarks"
     v-model="createABookmarks"
-    @closeDialog="createABookmarks = false"
+    @closeDialog="createBookmarkModal"
   >
-    <label class="font-bold" for="bookName">{{
-      texts.bookFormModel.name
-    }}</label>
-    <UInput placeholder="Name" v-model="bookName" maxLength="100" />
+    <div
+      v-for="(option, index) in options"
+      :key="index"
+      class="flex items-center gap-5 py-2"
+    >
+      <span>{{ index + 1 }}.</span>
+      <div class="flex gap-5 rounded-2xl pr-2 items-center flex-grow">
+        <UInput
+          size="sm"
+          class="w-full lg:w-40vw"
+          v-model="option.name"
+          placeholder="Name"
+        />
+        <UInput
+          size="sm"
+          class="w-full lg:w-40vw"
+          v-model="option.url"
+          placeholder="http://example.com"
+          type="url"
+        />
+        <img
+          src="/assets/icons/deleteIcon.svg"
+          alt="delete"
+          class="cursor-pointer"
+          @click="removeOption(index)"
+        />
+      </div>
+    </div>
 
-    <label class="font-bold" for="bookUrl">{{ texts.bookFormModel.url }}</label>
-    <UInput type="url" placeholder="https://example.com" v-model="bookUrl" />
+    <UButton
+      v-if="options.length < 7"
+      size="sm"
+      color="gray"
+      variant="ghost"
+      trailing-icon="i-heroicons-plus-20-solid"
+      class="rounded-2xl px-6 w-16"
+      @click="addOption"
+    />
 
     <div class="flex justify-end">
       <UButton
         class="w-fit"
         color="blue"
         variant="solid"
-        @click="createABookmarkSubmit"
+        @click="createABookmarksubmit"
+        >{{ texts.bookFormModel.add }}</UButton
       >
-        {{ texts.bookFormModel.add }}
-      </UButton>
     </div>
   </UiKitsUiSlotsFormModelSlot>
 </template>
 
-<script setup>
-import { encodeBase62 } from "@/utils/encodeBase62";
+<script setup lang="ts">
 import texts from "@/texts/texts.json";
 
 const createABookmarks = ref(false);
-const bookName = ref("");
-const bookUrl = ref("");
+const optionIndex = ref(0);
+const options = ref([
+  {
+    id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+    name: "",
+    url: "",
+  },
+]);
+
+watch(
+  [options],
+  () => {
+    options.value.length >= 1 &&
+      options.value.length <= 7 &&
+      options.value.every((option) => option.name && option.url);
+  },
+  { deep: true }
+);
+
+const addOption = () => {
+  if (options.value.length < 7)
+    options.value.push({
+      id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+      name: "",
+      url: "",
+    });
+};
+
+const removeOption = (index: number) => {
+  if (options.value.length > 1) options.value.splice(index, 1);
+  else {
+    options.value[index].name = "";
+    options.value[index].url = "";
+  }
+};
 
 const createBookmarkModal = () => {
   createABookmarks.value = !createABookmarks.value;
 
   if (!createABookmarks.value) {
-    bookName.value = "";
-    bookUrl.value = "";
+    options.value = [
+      {
+        id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+        name: "",
+        url: "",
+      },
+    ];
   }
 };
 
-const createABookmarkSubmit = () => {
-  if (!bookName.value || !bookUrl.value) {
-    console.error("All fields are required to add a bookmark.");
+const createABookmarksubmit = () => {
+  if (!options.value.every((option) => option.name && option.url)) {
     return;
   }
-
-  const uniqueId = encodeBase62(Date.now());
 
   createBookmarkModal();
 };

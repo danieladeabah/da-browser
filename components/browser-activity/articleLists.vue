@@ -5,14 +5,15 @@
         {{ texts.articles.text }}
       </p>
       <p
-        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer"
+        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer bg-[#F5F5F5] rounded px-2"
+        title="Create Article"
         @click="createArticleModal"
       >
         <img
           src="/assets/icons/plusIcon.svg"
-          alt="comment icon"
+          alt="create icon"
           class="w-2 h-2 cursor-pointer"
-          title="Add Comment"
+          title="Create Article"
         /><span>{{ texts.comments.add }}</span>
       </p>
     </div>

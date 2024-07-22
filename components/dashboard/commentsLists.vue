@@ -29,14 +29,18 @@
           comment.user_replies
         }}</span>
       </p>
-      <p class="flex items-center gap-1">
-        <img
-          src="/assets/icons/deleteIcon.svg"
-          alt="delete icon"
-          class="w-3 h-3 cursor-pointer"
-          title="Delete"
-        />
-      </p>
+      <UDropdown
+        mode="hover"
+        :popper="{ placement: 'right-start' }"
+        :items="deleteLists"
+        ><p class="flex items-center gap-1">
+          <img
+            src="/assets/icons/deleteIcon.svg"
+            alt="delete icon"
+            class="w-3 h-3 cursor-pointer"
+            title="Delete"
+          /></p
+      ></UDropdown>
     </div>
     <div v-if="comment.replies.length" class="pl-4 border-l-2 border-gray-300">
       <DashboardCommentsLists
@@ -52,4 +56,15 @@
 defineProps({
   comment: Object,
 });
+
+const deleteLists = [
+  [
+    {
+      label: "Cancel",
+    },
+    {
+      label: "Yes, Remove",
+    },
+  ],
+];
 </script>
