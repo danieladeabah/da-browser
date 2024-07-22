@@ -7,7 +7,11 @@
       :iconSrc="link.iconSrc"
       :label="link.label"
     />
-    <p class="flex flex-col items-center gap-2 cursor-pointer" title="Add New">
+    <p
+      class="flex flex-col items-center gap-2 cursor-pointer"
+      title="Add New"
+      @click="createBookmarkModal"
+    >
       <span
         class="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-sm p-2"
       >
@@ -15,9 +19,63 @@
       </span>
     </p>
   </div>
+
+  <UiKitsUiSlotsFormModelSlot
+    form-title="Create Bookmark"
+    @close-modal="createBookmarkModal"
+    v-if="createABookmarks"
+    v-model="createABookmarks"
+    @closeDialog="createABookmarks = false"
+  >
+    <label class="font-bold" for="bookName">{{
+      texts.bookFormModel.name
+    }}</label>
+    <UInput placeholder="Name" v-model="bookName" maxLength="100" />
+
+    <label class="font-bold" for="bookUrl">{{ texts.bookFormModel.url }}</label>
+    <UInput type="url" placeholder="https://example.com" v-model="bookUrl" />
+
+    <div class="flex justify-end">
+      <UButton
+        class="w-fit"
+        color="blue"
+        variant="solid"
+        @click="createABookmarkSubmit"
+      >
+        {{ texts.bookFormModel.add }}
+      </UButton>
+    </div>
+  </UiKitsUiSlotsFormModelSlot>
 </template>
 
 <script setup>
+import { encodeBase62 } from "@/utils/encodeBase62";
+import texts from "@/texts/texts.json";
+
+const createABookmarks = ref(false);
+const bookName = ref("");
+const bookUrl = ref("");
+
+const createBookmarkModal = () => {
+  createABookmarks.value = !createABookmarks.value;
+
+  if (!createABookmarks.value) {
+    bookName.value = "";
+    bookUrl.value = "";
+  }
+};
+
+const createABookmarkSubmit = () => {
+  if (!bookName.value || !bookUrl.value) {
+    console.error("All fields are required to add a bookmark.");
+    return;
+  }
+
+  const uniqueId = encodeBase62(Date.now());
+
+  createBookmarkModal();
+};
+
 const links = [
   {
     to: "https://www.behance.net",

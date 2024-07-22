@@ -7,6 +7,7 @@
       </p>
       <p
         class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer"
+        @click="addCommentModal"
       >
         <img
           src="/assets/icons/plusIcon.svg"
@@ -20,17 +21,76 @@
       <DashboardCommentsLists :comment="comment" />
     </div>
   </div>
+
+  <UiKitsUiSlotsFormModelSlot
+    form-title="Add Comment"
+    @close-modal="addCommentModal"
+    v-if="addAComment"
+    v-model="addAComment"
+    @closeDialog="addAComment = false"
+  >
+    <label class="font-bold" for="author">{{
+      texts.bookFormModel.name
+    }}</label>
+    <UInput placeholder="Name" v-model="author" maxLength="100" />
+
+    <label class="font-bold" for="message">{{
+      texts.comments.message
+    }}</label>
+    <UTextarea
+      placeholder="Message"
+      :rows="10"
+      v-model="message"
+      maxLength="500"
+    />
+
+    <div class="flex justify-end">
+      <UButton
+        class="w-fit"
+        color="blue"
+        variant="solid"
+        @click="addACommentSubmit"
+      >
+        {{ texts.bookFormModel.add }}
+      </UButton>
+    </div>
+  </UiKitsUiSlotsFormModelSlot>
 </template>
 
 <script setup>
-import texts from "~/texts/texts.json";
+import { encodeBase62 } from "@/utils/encodeBase62";
+import texts from "@/texts/texts.json";
+
+const addAComment = ref(false);
+const author = ref("");
+const message = ref("");
+
+const addCommentModal = () => {
+  addAComment.value = !addAComment.value;
+
+  if (!addAComment.value) {
+    author.value = "";
+    message.value = "";
+  }
+};
+
+const addACommentSubmit = () => {
+  if (!author.value || !message.value) {
+    console.error("All fields are required to add a bookmark.");
+    return;
+  }
+
+  const uniqueId = encodeBase62(Date.now());
+
+  addCommentModal();
+};
 
 const comments = ref([
   {
     id: 1,
     author: "Fiz Danielz",
     time: "1 hr ago",
-    text: "Suspendisse eget sapien in sem cursus facilisis. Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna",
+    message: "Suspendisse eget sapien in sem cursus facilisis. Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna",
     likes: 12,
     user_replies: 1,
     replies: [
@@ -38,7 +98,7 @@ const comments = ref([
         id: 2,
         author: "Jane Dee",
         time: "2 mins ago",
-        text: "Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna. Mauris euismod ligula eget purus cursus sollicitudin.",
+        message: "Sed viverra felis non metus ullamcorper sollicitudin. Ut nec purus magna. Mauris euismod ligula eget purus cursus sollicitudin.",
         likes: 2,
         user_replies: 0,
         replies: [],

@@ -7,7 +7,7 @@
       </div>
       <span class="text-gray-400">{{ comment.time }}</span>
     </div>
-    <p>{{ comment.text }}</p>
+    <p>{{ comment.message }}</p>
     <div class="flex items-center gap-5">
       <p class="flex items-center gap-1">
         <img

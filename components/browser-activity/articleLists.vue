@@ -1,8 +1,21 @@
 <template>
   <div class="flex flex-col mb-20">
-    <p class="mx-5 mt-8 mb-4 text-[#73B1F0] text-sm font-normal">
-      {{ texts.articles.text }}
-    </p>
+    <div class="flex items-center justify-between mx-5 mt-8 mb-4">
+      <p class="text-[#73B1F0] text-sm font-normal">
+        {{ texts.articles.text }}
+      </p>
+      <p
+        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer"
+        @click="createArticleModal"
+      >
+        <img
+          src="/assets/icons/plusIcon.svg"
+          alt="comment icon"
+          class="w-2 h-2 cursor-pointer"
+          title="Add Comment"
+        /><span>{{ texts.comments.add }}</span>
+      </p>
+    </div>
     <NuxtLink
       v-for="(article, index) in articles"
       :key="index"
@@ -20,10 +33,96 @@
       />
     </NuxtLink>
   </div>
+
+  <UiKitsUiSlotsFormModelSlot
+    form-title="Create Article"
+    @close-modal="createArticleModal"
+    v-if="createAArticles"
+    v-model="createAArticles"
+    @closeDialog="createAArticles = false"
+  >
+    <label class="font-bold" for="fullName">{{
+      texts.createArticleForm.fullname
+    }}</label>
+    <UInput placeholder="Full name" v-model="fullName" />
+
+    <label class="font-bold" for="articleUrl">{{
+      texts.createArticleForm.url
+    }}</label>
+    <UInput type="url" placeholder="https://example.com" v-model="articleUrl" />
+
+    <label class="font-bold" for="sourceName">{{
+      texts.createArticleForm.source
+    }}</label>
+    <UInput placeholder="Source name" v-model="sourceName" />
+
+    <label class="font-bold" for="articleTitle">{{
+      texts.createArticleForm.title
+    }}</label>
+    <UInput placeholder="Enter title" v-model="articleTitle" />
+
+    <label class="font-bold" for="articleDescription">{{
+      texts.createArticleForm.description
+    }}</label>
+    <UTextarea
+      placeholder="Message"
+      :rows="10"
+      v-model="articleDescription"
+      maxLength="500"
+    />
+
+    <div class="flex justify-end">
+      <UButton
+        class="w-fit"
+        color="blue"
+        variant="solid"
+        @click="createAArticleSubmit"
+      >
+        {{ texts.bookFormModel.add }}
+      </UButton>
+    </div>
+  </UiKitsUiSlotsFormModelSlot>
 </template>
 
 <script setup>
-import texts from "~/texts/texts.json";
+import { encodeBase62 } from "@/utils/encodeBase62";
+import texts from "@/texts/texts.json";
+
+const createAArticles = ref(false);
+const fullName = ref("");
+const articleUrl = ref("");
+const sourceName = ref("");
+const articleTitle = ref("");
+const articleDescription = ref("");
+
+const createArticleModal = () => {
+  createAArticles.value = !createAArticles.value;
+
+  if (!createAArticles.value) {
+    fullName.value = "";
+    articleUrl.value = "";
+    sourceName.value = "";
+    articleTitle.value = "";
+    articleDescription.value = "";
+  }
+};
+
+const createAArticleSubmit = () => {
+  if (
+    !fullName.value ||
+    !articleUrl.value ||
+    !sourceName.value ||
+    !articleTitle.value ||
+    !articleDescription.value
+  ) {
+    console.error("All fields are required to add a Article.");
+    return;
+  }
+
+  const uniqueId = encodeBase62(Date.now());
+
+  createArticleModal();
+};
 
 const articles = [
   {

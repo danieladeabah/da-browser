@@ -1,10 +1,24 @@
 {
+  "specialization": "Frontend Developer",
   "comments": {
     "text": "Comments",
+    "message": "Message",
     "add": "Add"
   },
   "articles": {
     "text": "Articles for you"
   },
-  "specialization": "Frontend Developer"
+  "bookFormModel": {
+    "name": "Name",
+    "url": "Enter URL",
+    "add": "Done",
+    "edit": "Edit"
+  },
+  "createArticleForm": {
+    "fullname": "Full name",
+    "url": "Enter URL",
+    "source": "Source name",
+    "title": "Title",
+    "description": "Description"
+  }
 }
