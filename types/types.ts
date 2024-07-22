@@ -28,7 +28,7 @@ export interface Article {
 }
 
 export interface Bookmark {
-  id: string;
+  id: number;
   name: string;
   url: string;
 }
