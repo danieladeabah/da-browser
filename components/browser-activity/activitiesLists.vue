@@ -182,6 +182,7 @@ const createABookmarksubmit = () => {
   createBookmarkModal();
 };
 
+// Load bookmarks
 onMounted(() => {
   loadBookmarks();
 });
