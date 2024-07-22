@@ -1,11 +1,11 @@
 <template>
   <div class="grid grid-cols-4 gap-5 mt-10">
     <BrowserActivitySourceLink
-      v-for="(link, index) in links"
+      v-for="(link, index) in bookmarks"
       :key="index"
-      :to="link.to"
-      :iconSrc="link.iconSrc"
-      :label="link.label"
+      :to="link.url"
+      :iconSrc="getIconSrc(link.name)"
+      :label="link.name"
     />
     <p
       class="flex flex-col items-center gap-2 cursor-pointer"
@@ -39,6 +39,7 @@
           class="w-full lg:w-40vw"
           v-model="option.name"
           placeholder="Name"
+          maxLength="10"
         />
         <UInput
           size="sm"
@@ -80,19 +81,47 @@
 
 <script setup lang="ts">
 import texts from "@/texts/texts.json";
+import type { Bookmark } from "~/types/types";
+
+const defaultIcon = "i-ic-twotone-vpn-lock";
+const iconMap: Record<string, string> = {
+  Behance: "i-devicon-behance",
+  Github: "i-devicon-github",
+  Facebook: "i-devicon-facebook",
+  AWS: "i-devicon-amazonwebservices-wordmark",
+  Google: "i-devicon-google",
+  Stackoverflow: "i-devicon-stackoverflow",
+  Couchbase: "i-devicon-couchbase",
+};
+
+const BOOKMARKS_KEY = "da-browser-ex-bookmarks-list";
+
+const bookmarks = ref<Bookmark[]>([]);
+const uniqueId = encodeBase62(Date.now());
+
+const loadBookmarks = () => {
+  const storedBookmarks = localStorage.getItem(BOOKMARKS_KEY);
+  if (storedBookmarks) {
+    bookmarks.value = JSON.parse(storedBookmarks);
+  }
+};
+
+const saveBookmarks = () => {
+  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks.value));
+};
 
 const createABookmarks = ref(false);
 const optionIndex = ref(0);
 const options = ref([
   {
-    id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+    id: Date.now() + optionIndex.value++,
     name: "",
     url: "",
   },
 ]);
 
 watch(
-  [options],
+  options,
   () => {
     options.value.length >= 1 &&
       options.value.length <= 7 &&
@@ -101,10 +130,14 @@ watch(
   { deep: true }
 );
 
+const getIconSrc = (label: string) => {
+  return iconMap[label] || defaultIcon;
+};
+
 const addOption = () => {
   if (options.value.length < 7)
     options.value.push({
-      id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+      id: Date.now() + optionIndex.value++,
       name: "",
       url: "",
     });
@@ -124,7 +157,7 @@ const createBookmarkModal = () => {
   if (!createABookmarks.value) {
     options.value = [
       {
-        id: assigneesEncodeBase62(Date.now(), optionIndex.value++),
+        id: Date.now() + optionIndex.value++,
         name: "",
         url: "",
       },
@@ -137,44 +170,19 @@ const createABookmarksubmit = () => {
     return;
   }
 
+  options.value.forEach((option) => {
+    bookmarks.value.push({
+      id: uniqueId + optionIndex.value++,
+      name: option.name,
+      url: option.url,
+    });
+  });
+
+  saveBookmarks();
   createBookmarkModal();
 };
 
-const links = [
-  {
-    to: "https://www.behance.net",
-    iconSrc: "i-devicon-behance",
-    label: "Behance",
-  },
-  {
-    to: "https://www.github.com",
-    iconSrc: "i-devicon-github",
-    label: "Github",
-  },
-  {
-    to: "https://www.facebook.com",
-    iconSrc: "i-devicon-facebook",
-    label: "Facebook",
-  },
-  {
-    to: "https://www.amazon.com",
-    iconSrc: "i-devicon-amazonwebservices-wordmark",
-    label: "AWS",
-  },
-  {
-    to: "https://www.google.com",
-    iconSrc: "i-devicon-google",
-    label: "Google",
-  },
-  {
-    to: "https://stackoverflow.com",
-    iconSrc: "i-devicon-stackoverflow",
-    label: "Stackoverflow",
-  },
-  {
-    to: "https://www.couchbase.com",
-    iconSrc: "i-devicon-couchbase",
-    label: "Couchbase",
-  },
-];
+onMounted(() => {
+  loadBookmarks();
+});
 </script>
