@@ -93,7 +93,7 @@ const comments = ref([
     user_replies: 1,
     replies: [
       {
-        id: 2,
+        id: 1,
         author: "Jane Dee",
         time: "2 mins ago",
         message:
