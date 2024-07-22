@@ -7,14 +7,13 @@
       :iconSrc="link.iconSrc"
       :label="link.label"
     />
-    <NuxtLink to="/reads/dd" class="flex flex-col items-center gap-2">
+    <p class="flex flex-col items-center gap-2 cursor-pointer" title="Add New">
       <span
-        class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl p-2"
+        class="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-sm p-2"
       >
         <img src="/assets/icons/plusIcon.svg" alt="arrow icon" />
       </span>
-      <span class="text-gray-400 text-sm font-normal">Add New</span>
-    </NuxtLink>
+    </p>
   </div>
 </template>
 

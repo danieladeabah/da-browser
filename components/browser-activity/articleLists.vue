@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col mb-20">
     <p class="mx-5 mt-8 mb-4 text-[#73B1F0] text-sm font-normal">
-      Articles for you
+      {{ texts.articles.text }}
     </p>
     <NuxtLink
       v-for="(article, index) in articles"
@@ -23,6 +23,8 @@
 </template>
 
 <script setup>
+import texts from "~/texts/texts.json";
+
 const articles = [
   {
     id: "skdsjd",

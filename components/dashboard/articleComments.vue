@@ -3,14 +3,18 @@
   <div class="flex flex-col mx-5 my-14">
     <div class="flex items-center justify-between my-2">
       <p class="text-[#73B1F0] text-sm font-normal">
-        Comments ({{ comments.length }})
+        {{ texts.comments.text }} ({{ comments.length }})
       </p>
-      <img
-        src="/assets/icons/plusIcon.svg"
-        alt="comment icon"
-        class="w-2 h-2 cursor-pointer"
-        title="Add Comment"
-      />
+      <p
+        class="flex items-center gap-1 text-sm text-gray-400 font-extralight cursor-pointer"
+      >
+        <img
+          src="/assets/icons/plusIcon.svg"
+          alt="comment icon"
+          class="w-2 h-2 cursor-pointer"
+          title="Add Comment"
+        /><span>{{ texts.comments.add }}</span>
+      </p>
     </div>
     <div v-for="comment in comments" :key="comment.id">
       <DashboardCommentsLists :comment="comment" />
@@ -19,6 +23,8 @@
 </template>
 
 <script setup>
+import texts from "~/texts/texts.json";
+
 const comments = ref([
   {
     id: 1,
