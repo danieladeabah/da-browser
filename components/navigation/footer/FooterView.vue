@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bg-white bottom-0 flex items-center justify-between w-full lg:w-5/12 p-2 lg:p-5"
+    class="fixed bg-white bottom-0 border-t flex items-center justify-between w-full lg:w-5/12 p-2 lg:p-5"
   >
     <ArrowLeftIcon
       :iconColor="route.path === '/' ? '#c9c9c9' : '#696969'"
@@ -12,13 +12,13 @@
       @click="reloadPage"
       class="cursor-pointer"
     />
-    <img
+    <UIcon
       v-for="(icon, index) in icons"
       :key="index"
-      :src="icon.src"
-      :alt="icon.alt"
+      :name="icon.src"
       @click="icon.Onclick"
-      class="w-8 h-8 cursor-pointer"
+      dynamic
+      class="w-8 h-8 cursor-pointer text-[#696969]"
     />
   </div>
 </template>
@@ -40,11 +40,11 @@ const reloadPage = () => {
 
 const icons = [
   {
-    src: "/_nuxt/assets/footer-icons/addIcon.svg",
+    src: "i-mdi-light-plus-box",
     alt: "add icon",
   },
   {
-    src: "/_nuxt/assets/footer-icons/menuIcon.svg",
+    src: "i-mdi-light-menu",
     alt: "menu icon",
   },
 ];
