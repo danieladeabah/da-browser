@@ -7,21 +7,98 @@
       alt="logo"
       class="m-5"
     />
-
     <div
-      class="flex items-center gap-5 w-full bg-[#F5F5F5] px-5 py-2 rounded-2xl"
+      class="flex flex-col items-center gap-5 w-full bg-[#F5F5F5] rounded-3xl"
     >
-      <input
-        type="search"
-        placeholder="Search or type address"
-        class="w-full bg-[#F5F5F5] border-0 outline-none"
-      />
-      <img
-        src="/assets/icons/microphoneIcon.svg"
-        alt="search icon"
-        class="w-5 h-5 cursor-pointer"
-        title="Voice Search"
-      />
+      <div
+        class="flex items-center gap-5 w-full bg-[#F5F5F5] px-5 py-2 rounded-2xl"
+      >
+        <input
+          type="search"
+          v-model="searchQuery"
+          :placeholder="
+            isListening ? 'Listening... 🎙️' : 'Search or type address'
+          "
+          class="w-full bg-[#F5F5F5] border-0 outline-none"
+          @keydown.enter="handleSearch"
+        />
+        <img
+          src="/assets/icons/microphoneIcon.svg"
+          alt="search icon"
+          class="w-5 h-5 cursor-pointer"
+          title="Voice Search"
+          @click="startVoiceRecognition"
+        />
+      </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const searchQuery = ref<string>("");
+const isListening = ref<boolean>(false);
+
+const isValidUrl = (url: string): boolean => {
+  const pattern = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  ); // fragment locator
+  return !!pattern.test(url);
+};
+
+const handleSearch = (): void => {
+  const query = searchQuery.value.trim();
+  if (isValidUrl(query)) {
+    window.location.href = query.startsWith("http") ? query : `http://${query}`;
+  } else {
+    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
+      query
+    )}`;
+  }
+};
+
+// Start voice recognition
+const startVoiceRecognition = () => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    console.error("Speech Recognition API not supported.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  isListening.value = true;
+
+  recognition.onresult = (event: SpeechRecognitionEvent) => {
+    const results = event.results as SpeechRecognitionResultList;
+    if (results.length > 0 && results[0].length > 0) {
+      const voiceQuery = results[0][0].transcript;
+      searchQuery.value = voiceQuery;
+    }
+  };
+
+  recognition.onerror = (event: SpeechRecognitionEvent) => {
+    console.error("Speech recognition error:", event.error);
+  };
+
+  recognition.onend = () => {
+    isListening.value = false;
+    console.log("Speech recognition service disconnected");
+
+    setTimeout(() => {
+      handleSearch();
+    }, 2000);
+  };
+
+  recognition.start();
+};
+</script>
