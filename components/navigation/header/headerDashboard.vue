@@ -102,12 +102,6 @@ const startVoiceRecognition = () => {
   recognition.onend = () => {
     isListening.value = false;
     console.log("Speech recognition service disconnected");
-
-    setTimeout(() => {
-      if (searchQuery.value.trim()) {
-        handleSearch();
-      }
-    }, 2000);
   };
 
   recognition.start();
