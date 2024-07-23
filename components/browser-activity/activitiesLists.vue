@@ -9,7 +9,7 @@
     />
     <p
       class="flex flex-col items-center gap-2 cursor-pointer"
-      title="Add New"
+      title="Add New Bookmark"
       @click="bookmarksStore.createBookmarkModal"
     >
       <span
@@ -39,7 +39,7 @@
           class="w-full lg:w-40vw"
           v-model="option.name"
           placeholder="Name"
-          maxLength="10"
+          maxLength="15"
         />
         <UInput
           size="sm"

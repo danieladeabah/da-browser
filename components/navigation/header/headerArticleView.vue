@@ -14,23 +14,17 @@
       <input
         readonly
         type="search"
-        placeholder="http://www.example.com/reads/sjkdhsd"
+        :value="currentArticleUrl"
         class="w-full bg-[#F5F5F5] border-0 outline-none"
       />
     </div>
 
     <img
-      src="/assets/header-icons/addfavoriteIcon.svg"
-      alt="favorite icon"
+      src="/assets/header-icons/shareIcon.svg"
+      alt="share icon"
       class="w-5 h-5 cursor-pointer"
-      title="Favorite"
-    />
-
-    <img
-      src="/assets/header-icons/downloadIcon.svg"
-      alt="download icon"
-      class="w-5 h-5 cursor-pointer"
-      title="Save as pdf"
+      title="Share"
+      @click="shareArticle"
     />
 
     <UDropdown :items="moreOptions" :popper="{ arrow: true }">
@@ -42,113 +36,50 @@
       />
     </UDropdown>
   </div>
-
-  <UiKitsUiSlotsFormModelSlot
-    form-title="Edit Article"
-    @close-modal="editArticleModal"
-    v-if="editAArticles"
-    v-model="editAArticles"
-    @closeDialog="editAArticles = false"
-  >
-    <label class="font-bold" for="fullName">{{
-      texts.createArticleForm.fullname
-    }}</label>
-    <UInput placeholder="Full name" v-model="fullName" />
-
-    <label class="font-bold" for="articleUrl">{{
-      texts.createArticleForm.url
-    }}</label>
-    <UInput type="url" placeholder="https://example.com" v-model="articleUrl" />
-
-    <label class="font-bold" for="sourceName">{{
-      texts.createArticleForm.source
-    }}</label>
-    <UInput placeholder="Source name" v-model="sourceName" />
-
-    <label class="font-bold" for="articleTitle">{{
-      texts.createArticleForm.title
-    }}</label>
-    <UInput placeholder="Enter title" v-model="articleTitle" />
-
-    <label class="font-bold" for="articleDescription">{{
-      texts.createArticleForm.description
-    }}</label>
-    <UTextarea
-      placeholder="Message"
-      :rows="10"
-      v-model="articleDescription"
-      maxLength="500"
-    />
-
-    <div class="flex justify-end">
-      <UButton
-        class="w-fit"
-        color="blue"
-        variant="solid"
-        @click="editAArticleSubmit"
-      >
-        {{ texts.bookFormModel.edit }}
-      </UButton>
-    </div>
-  </UiKitsUiSlotsFormModelSlot>
 </template>
 
 <script setup lang="ts">
-import { encodeBase62 } from "@/utils/encodeBase62";
-import texts from "@/texts/texts.json";
+import { useArticleStore } from "@/store/articles";
 
-const editAArticles = ref(false);
-const fullName = ref("");
-const articleUrl = ref("");
-const sourceName = ref("");
-const articleTitle = ref("");
-const articleDescription = ref("");
+const route = useRoute();
+const router = useRouter();
+const articleStore = useArticleStore();
 
-const editArticleModal = () => {
-  editAArticles.value = !editAArticles.value;
+const currentArticleId = ref<string>("");
+const currentArticleUrl = computed(() => window.location.href);
 
-  if (!editAArticles.value) {
-    fullName.value = "";
-    articleUrl.value = "";
-    sourceName.value = "";
-    articleTitle.value = "";
-    articleDescription.value = "";
-  }
-};
-
-const editAArticleSubmit = () => {
-  if (
-    !fullName.value ||
-    !articleUrl.value ||
-    !sourceName.value ||
-    !articleTitle.value ||
-    !articleDescription.value
-  ) {
-    console.error("All fields are required to add a Article.");
+const deleteArticle = () => {
+  if (!currentArticleId.value) {
+    console.error("No article selected for deletion.");
     return;
   }
 
-  const uniqueId = encodeBase62(Date.now());
-
-  editArticleModal();
+  articleStore.deleteArticle(currentArticleId.value);
+  router.push("/");
 };
+
+const shareArticle = () => {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert("Link copied to clipboard. Share it with others!");
+  });
+};
+
+onMounted(() => {
+  currentArticleId.value = route.params.viewId as string;
+  articleStore.loadArticles();
+});
 
 const moreOptions = [
   [
     {
-      label: "Share",
-    },
-    {
-      label: "Edit",
-      click() {
-        editArticleModal();
-      },
-    },
-    {
       label: "Delete",
+      click: deleteArticle,
     },
     {
       label: "Report",
+      click() {
+        window.open("https://danieladeabah.vercel.app/", "_blank");
+      },
     },
   ],
 ];

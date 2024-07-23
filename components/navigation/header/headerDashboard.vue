@@ -53,12 +53,18 @@ const isValidUrl = (url: string): boolean => {
 
 const handleSearch = (): void => {
   const query = searchQuery.value.trim();
-  if (isValidUrl(query)) {
-    window.location.href = query.startsWith("http") ? query : `http://${query}`;
+  if (query) {
+    if (isValidUrl(query)) {
+      window.location.href = query.startsWith("http")
+        ? query
+        : `http://${query}`;
+    } else {
+      window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
+        query
+      )}`;
+    }
   } else {
-    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
-      query
-    )}`;
+    console.log("Search query is empty. Please enter a search term.");
   }
 };
 
@@ -72,7 +78,7 @@ const startVoiceRecognition = () => {
   }
 
   const recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
+  recognition.lang = "en";
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
 
@@ -81,8 +87,11 @@ const startVoiceRecognition = () => {
   recognition.onresult = (event: SpeechRecognitionEvent) => {
     const results = event.results as SpeechRecognitionResultList;
     if (results.length > 0 && results[0].length > 0) {
-      const voiceQuery = results[0][0].transcript;
+      const voiceQuery = results[0][0].transcript.trim();
       searchQuery.value = voiceQuery;
+      if (voiceQuery) {
+        handleSearch();
+      }
     }
   };
 
@@ -95,7 +104,9 @@ const startVoiceRecognition = () => {
     console.log("Speech recognition service disconnected");
 
     setTimeout(() => {
-      handleSearch();
+      if (searchQuery.value.trim()) {
+        handleSearch();
+      }
     }, 2000);
   };
 

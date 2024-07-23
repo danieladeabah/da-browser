@@ -6,7 +6,8 @@
     "add": "Add"
   },
   "articles": {
-    "text": "Articles for you"
+    "text": "Articles for you",
+    "empty": "No articles yet"
   },
   "bookFormModel": {
     "name": "Name",
@@ -16,9 +17,10 @@
   },
   "createArticleForm": {
     "fullname": "Full name",
-    "url": "Enter URL",
+    "url": "Image URL",
     "source": "Source name",
     "title": "Title",
-    "description": "Description"
+    "description": "Description",
+    "urlInfo": "Leave blank if you don't have a url"
   }
 }
