@@ -39,7 +39,7 @@
           class="w-full lg:w-40vw"
           v-model="option.name"
           placeholder="Name"
-          maxLength="15"
+          maxLength="10"
         />
         <UInput
           size="sm"

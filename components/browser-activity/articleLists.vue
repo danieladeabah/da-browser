@@ -48,7 +48,7 @@
     <label class="font-bold" for="fullName">{{
       texts.createArticleForm.fullname
     }}</label>
-    <UInput placeholder="Full name" v-model="fullName" />
+    <UInput placeholder="Full name" v-model="fullName" maxLength="20" />
 
     <label class="font-bold" for="articleUrl">{{
       texts.createArticleForm.url
@@ -59,22 +59,17 @@
     <label class="font-bold" for="sourceName">{{
       texts.createArticleForm.source
     }}</label>
-    <UInput placeholder="Source name" v-model="sourceName" />
+    <UInput placeholder="Source name" v-model="sourceName" maxLength="15" />
 
     <label class="font-bold" for="articleTitle">{{
       texts.createArticleForm.title
     }}</label>
-    <UInput placeholder="Enter title" v-model="articleTitle" />
+    <UInput placeholder="Enter title" v-model="articleTitle" maxLength="60" />
 
     <label class="font-bold" for="articleDescription">{{
       texts.createArticleForm.description
     }}</label>
-    <UTextarea
-      placeholder="Message"
-      :rows="10"
-      v-model="articleDescription"
-      maxLength="500"
-    />
+    <UTextarea placeholder="Message" :rows="10" v-model="articleDescription" maxLength="5000" />
 
     <div class="flex justify-end">
       <UButton
