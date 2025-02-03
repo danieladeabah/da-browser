@@ -1,6 +1,6 @@
 # ./da-browser
 
-## Project setup
+## Setup
 
 ```bash
 # yarn
