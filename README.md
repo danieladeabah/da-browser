@@ -1,24 +1,16 @@
-# ./adeabah
+# ./da-browser
 
 ## Project setup
-```
-yarn install
-```
 
-### Compiles and hot-reloads for development
-```
-yarn run dev
-```
+```bash
+# yarn
+yarn install # install dependencies
 
-### Compiles and minifies for production
-```
-yarn build
-```
+yarn run dev # start the development server
 
-### Lints and fixes files
-```
-yarn lint
-```
+yarn build # build the application for production
+
+yarn 
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
